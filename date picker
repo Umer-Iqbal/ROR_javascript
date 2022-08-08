@@ -1,0 +1,34 @@
+ html:
+ 
+<label data-year-filter-target="dateFilter" class="w-100 h-50 cursor-pointer">
+  <h2 class="text-white position-absolute"><%= @year %></h2>
+  <%= inline_svg_tag("select-dropdown-white.svg") %>
+</label>
+
+js:
+  year_filter_controller: 
+
+import { Controller } from 'stimulus'
+
+export default class extends Controller {
+  static get targets () {
+    return ['dateFilter']
+  }
+
+  static values = {
+    url: String
+  }
+
+  connect () {
+    $(this.dateFilterTarget).datepicker({
+      autoClose: true,
+      format: 'yyyy',
+      viewMode: 'years',
+      minViewMode: 'years',
+      setDate: new Date(),
+      endDate: new Date(),
+    }).on('changeDate', (event) => {
+      window.location = `${this.urlValue}?year=${event.date.getFullYear()}`
+    })
+  }
+}
